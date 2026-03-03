@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center; padding: 50px;">
+    <h1 style="color: #dc3545;">⚠️ Oops!</h1>
+    <p style="font-size: 1.2em;">{{ message }}</p>
+    <br>
+    <a href="{% url 'cart_detail' %}" style="color: blue; text-decoration: underline;">
+        Return to Cart
+    </a>
+</div>
+{% endblock %}

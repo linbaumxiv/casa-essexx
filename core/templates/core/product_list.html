@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 30px; background: #f4f4f4; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+    <form action="{% url 'home' %}" method="get" style="display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end;">
+        <div style="flex: 2; min-width: 200px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Search</label>
+            <input type="text" name="q" placeholder="What are you looking for?" value="{{ request.GET.q|default:'' }}" 
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <div style="flex: 1; min-width: 100px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Min $</label>
+            <input type="number" name="min_price" placeholder="0" value="{{ request.GET.min_price|default:'' }}" 
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <div style="flex: 1; min-width: 100px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Max $</label>
+            <input type="number" name="max_price" placeholder="1000" value="{{ request.GET.max_price|default:'' }}" 
+                   style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                Apply Filters
+            </button>
+            <a href="{% url 'home' %}" style="padding: 10px; color: #666; text-decoration: none; border: 1px solid #ccc; border-radius: 4px; background: white;">
+                Reset
+            </a>
+        </div>
+    </form>
+</div>
+
+<p style="color: #666;">Showing {{ products.count }} products.</p>
+<h1>Welcome to Casa Essexx</h1>
+
+<div class="product-grid" style="display: flex; flex-wrap: wrap; gap: 20px;">
+    {% for product in products %}
+      <div class="product-card" style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; width: 220px; margin-bottom: 20px; background: white;">
+        
+        <div style="width: 100%; height: 150px; margin-bottom: 10px; overflow: hidden; border-radius: 4px;">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+                <div style="width: 100%; height: 100%; background: #eee; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.8rem;">
+                    📦 No Image
+                </div>
+            {% endif %}
+        </div>
+
+        <h3>
+            <a href="{% url 'product_detail' product.id %}" style="text-decoration: none; color: #007bff;">
+                {{ product.name }}
+            </a>
+        </h3>
+
+        <p style="margin: 5px 0;">
+            {% if product.avg_rating %}
+                <span style="color: #f39c12;">★ {{ product.avg_rating|floatformat:1 }}</span>
+                <small style="color: #666;">({{ product.reviews.count }})</small>
+            {% else %}
+                <span style="color: #666; font-size: 0.8em; font-style: italic;">No reviews</span>
+            {% endif %}
+        </p>
+
+        <p style="font-size: 0.9em; color: #555;">{{ product.description|truncatewords:8 }}</p>
+        <p><strong>Price: ${{ product.price }}</strong></p>
+
+        {% if product.stock <= 0 %}
+          <p style="color: #721c24; background: #f8d7da; padding: 5px; border-radius: 4px; font-weight: bold; text-align: center; font-size: 0.8em;">OUT OF STOCK</p>
+          <button disabled style="width: 100%; padding: 10px; background: #ccc; border: none; border-radius: 4px;">Sold Out</button>
+        {% else %}
+          {% if product.stock <= 5 %}
+            <p style="color: #856404; background: #fff3cd; padding: 5px; border-radius: 4px; text-align: center; font-size: 0.8em;">⚠️ Only {{ product.stock }} left!</p>
+          {% else %}
+            <p style="color: #155724; font-size: 0.8em;">In Stock: {{ product.stock }}</p>
+          {% endif %}
+          
+          <form action="{% url 'add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+                Add to Cart
+            </button>
+          </form>
+        {% endif %} 
+      </div>
+    {% empty %}
+      <p>No products match your search/filter criteria.</p>
+    {% endfor %}
+</div>
+{% endblock %}

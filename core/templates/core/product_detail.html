@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div style="display: flex; gap: 40px; margin-top: 20px; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 300px; overflow: hidden; border-radius: 8px; border: 1px solid #ddd; max-height: 500px;">
+        {% if product.image %}
+            <style>
+                .zoom-container img { transition: transform .3s ease; cursor: zoom-in; }
+                .zoom-container img:hover { transform: scale(1.2); }
+            </style>
+            <div class="zoom-container">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; display: block;">
+            </div>
+        {% else %}
+            <div style="height: 400px; background: #eee; display: flex; align-items: center; justify-content: center; color: #999;">
+                No Image Available
+            </div>
+        {% endif %}
+    </div>
+
+    <div style="flex: 1; min-width: 300px;">
+        <h1 style="margin-top: 0;">{{ product.name }}</h1>
+        <p style="font-size: 2rem; color: #28a745; font-weight: bold; margin: 10px 0;">${{ product.price }}</p>
+        
+        <p style="color: {% if product.stock > 0 %}#155724{% else %}#721c24{% endif %}; font-weight: bold;">
+            {% if product.stock > 0 %} In Stock ({{ product.stock }} available) {% else %} Out of Stock {% endif %}
+        </p>
+
+        <hr>
+        <p style="line-height: 1.6; color: #444;">{{ product.description }}</p>
+        <hr>
+
+        {% if product.stock > 0 %}
+            <form action="{% url 'add_to_cart' product.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" style="width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; font-weight: bold;">
+                    Add to Cart
+                </button>
+            </form>
+        {% else %}
+            <button disabled style="width: 100%; padding: 15px; background: #ccc; color: #666; border: none; border-radius: 5px; cursor: not-allowed;">
+                Currently Unavailable
+            </button>
+        {% endif %}
+    </div>
+</div>
+
+<hr style="margin: 40px 0;">
+
+<div style="max-width: 800px;">
+    <h3>Customer Reviews</h3>
+    {% for review in reviews %}
+        <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
+            <strong style="color: #007bff;">{{ review.user.username }}</strong> 
+            <span style="color: #f39c12; margin-left: 10px;">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                {% endfor %}
+            </span>
+            <p style="margin: 10px 0;">{{ review.comment }}</p>
+            <small style="color: #999;">{{ review.created_at|date:"F j, Y" }}</small>
+        </div>
+    {% empty %}
+        <p style="font-style: italic; color: #666;">No reviews yet. Be the first to share your thoughts!</p>
+    {% endfor %}
+
+    <div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+        {% if user.is_authenticated %}
+            <h4>Leave a Review</h4>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" style="background: #343a40; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                    Submit Review
+                </button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Login</a> to leave a review.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

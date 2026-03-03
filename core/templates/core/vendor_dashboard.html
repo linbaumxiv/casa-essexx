@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Vendor Dashboard</h1>
+  <a href="{% url 'store_create' %}" style="background: green; color: white; padding: 10px; text-decoration: none; border-radius: 4px;">+ Create New Store</a>
+
+  <h2 style="margin-top: 30px;">My Stores</h2>
+  {% for store in stores %}
+    <div style="border: 1px solid #ccc; margin-bottom: 20px; padding: 20px; border-radius: 8px;">
+      <h3>{{ store.name }}</h3>
+      
+      <a href="{% url 'store_edit' store.id %}">Edit Store Info</a> | 
+      
+      <a href="{% url 'product_add' %}?store={{ store.id }}">Add Product</a>
+
+      <h4>Products:</h4>
+      <ul>
+        {% for product in store.products.all %}
+          <li>
+              {{ product.name }} — ${{ product.price }} 
+              (<a href="{% url 'product_edit' product.id %}">Edit</a> | 
+               <a href="{% url 'product_delete' product.id %}" style="color: red;">Delete</a>)
+          </li>
+        {% empty %}
+          <li>No products yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% empty %}
+    <p>You haven't created any stores yet.</p>
+  {% endfor %}
+{% endblock %}
