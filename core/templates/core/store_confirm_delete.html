@@ -1,0 +1,23 @@
+<!-- Planning for failure: prevents accidental data loss-->
+<!--This step asks the user to confirm the store deletion -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #f5c6cb; background: #f8d7da; border-radius: 8px;">
+    <h2 style="color: #721c24;">Delete Store: {{ object.name }}?</h2>
+    <p style="color: #721c24;">
+        <strong>Warning:</strong> Deleting this store will permanently remove all associated products and data. This action cannot be undone.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            Yes, Delete Permanently
+        </button>
+        <a href="{% url 'vendor_dashboard' %}" style="margin-left: 15px; text-decoration: none; color: #6c757d;">
+            Cancel and Go Back
+        </a>
+    </form>
+</div>
+{% endblock %}

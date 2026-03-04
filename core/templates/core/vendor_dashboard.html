@@ -2,31 +2,52 @@
 
 {% block content %}
   <h1>Vendor Dashboard</h1>
-  <a href="{% url 'store_create' %}" style="background: green; color: white; padding: 10px; text-decoration: none; border-radius: 4px;">+ Create New Store</a>
+  <p>Welcome, {{ user.username }}. Manage your stores and inventory below.</p>
+  
+  <a href="{% url 'store_create' %}" style="background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+    + Create New Store
+  </a>
 
   <h2 style="margin-top: 30px;">My Stores</h2>
   {% for store in stores %}
-    <div style="border: 1px solid #ccc; margin-bottom: 20px; padding: 20px; border-radius: 8px;">
-      <h3>{{ store.name }}</h3>
+    <div style="border: 1px solid #ddd; margin-bottom: 20px; padding: 20px; border-radius: 8px; background-color: #fcfcfc;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3 style="margin: 0;">{{ store.name }}</h3>
+          <div>
+              <a href="{% url 'store_edit' store.id %}" style="text-decoration: none; margin-right: 10px;">Edit Info</a>
+              <a href="{% url 'delete_store' store.id %}" 
+                 style="color: #dc3545; font-size: 0.8rem; text-decoration: none; border: 1px solid #dc3545; padding: 3px 8px; border-radius: 4px;">
+                 Delete Store
+              </a>
+          </div>
+      </div>
       
-      <a href="{% url 'store_edit' store.id %}">Edit Store Info</a> | 
-      
-      <a href="{% url 'product_add' %}?store={{ store.id }}">Add Product</a>
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
 
-      <h4>Products:</h4>
-      <ul>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h4>Products</h4>
+          <a href="{% url 'product_add' %}?store={{ store.id }}" style="font-size: 0.9rem; background: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 4px;">
+            + Add Product to {{ store.name }}
+          </a>
+      </div>
+
+      <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
         {% for product in store.products.all %}
-          <li>
-              {{ product.name }} — ${{ product.price }} 
-              (<a href="{% url 'product_edit' product.id %}">Edit</a> | 
-               <a href="{% url 'product_delete' product.id %}" style="color: red;">Delete</a>)
+          <li style="padding: 8px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+              <span><strong>{{ product.name }}</strong> — ${{ product.price }}</span>
+              <span>
+                  <a href="{% url 'product_edit' product.id %}" style="font-size: 0.85rem; text-decoration: none;">Edit</a> | 
+                  <a href="{% url 'product_delete' product.id %}" style="color: #dc3545; font-size: 0.85rem; text-decoration: none;">Delete</a>
+              </span>
           </li>
         {% empty %}
-          <li>No products yet.</li>
+          <li style="color: #888; font-style: italic;">No products in this store yet.</li>
         {% endfor %}
       </ul>
     </div>
   {% empty %}
-    <p>You haven't created any stores yet.</p>
+    <div style="text-align: center; padding: 40px; border: 2px dashed #ccc; color: #777;">
+        <p>You haven't created any stores yet. Click the button above to get started!</p>
+    </div>
   {% endfor %}
 {% endblock %}

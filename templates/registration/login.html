@@ -1,19 +1,25 @@
 {% extends "base.html" %}
 
+{% block title %}Login | Casa Essexx{% endblock %}
+
 {% block content %}
-<div style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
-    <h2>Login to Casa Essexx</h2>
+<div style="max-width: 400px; margin: 40px auto; padding: 30px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <h2 style="margin-top: 0; text-align: center;">Login to Casa Essexx</h2>
     
     <form method="post">
         {% csrf_token %}
+        
         {{ form.as_p }}
-        <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        
+        <button type="submit" style="width: 100%; padding: 12px; background-color: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; font-weight: bold;">
             Login
         </button>
     </form>
     
-    <p style="margin-top: 15px; font-size: 0.9em;">
-        Don't have an account? Contact the admin to get started.
-    </p>
+    <div style="margin-top: 20px; font-size: 0.9em; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
+        <p>Don't have an account? <a href="{% url 'register' %}" style="color: #007bff;">Register here</a></p>
+        
+        <p><a href="{% url 'password_reset' %}" style="color: #6c757d;">Forgot your password?</a></p>
+    </div>
 </div>
 {% endblock %}

@@ -52,11 +52,23 @@
     {% for review in reviews %}
         <div style="border-bottom: 1px solid #eee; padding: 15px 0;">
             <strong style="color: #007bff;">{{ review.user.username }}</strong> 
+
+            {% if review.is_verified %}
+                <span style="background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; margin-left: 10px; border: 1px solid #c3e6cb;">
+                    Verified Purchase ✅
+                </span>
+            {% else %}
+                <span style="background: #e2e3e5; color: #383d41; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-left: 10px; border: 1px solid #d6d8db;">
+                    Unverified Review
+                </span>
+            {% endif %}
+
             <span style="color: #f39c12; margin-left: 10px;">
                 {% for i in "12345" %}
                     {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
                 {% endfor %}
             </span>
+            
             <p style="margin: 10px 0;">{{ review.comment }}</p>
             <small style="color: #999;">{{ review.created_at|date:"F j, Y" }}</small>
         </div>
