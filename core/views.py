@@ -8,9 +8,25 @@ from django.urls import reverse_lazy
 from .forms import CustomUserCreationForm, ReviewForm
 from django.db import transaction  
 from django.core.mail import send_mail 
+from rest_framework import viewsets, permissions
 from .models import Store, Product, Order, OrderItem, Review 
+from .serializers import StoreSerializer, ProductSerializer, ReviewSerializer
 from django.db.models import Avg
 
+#--- API ACCESS---
+class StoreViewSet(viewsets.ModelViewSet):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
+    # Allow anyone to see stores, but only logged-in users to create/edit
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(vendor=self.request.user)
+
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 #---NEW USER---
 class RegisterView(CreateView):

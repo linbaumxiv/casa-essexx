@@ -1,6 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import DefaultRouter 
 from . import views
 from .views import RegisterView
+
+router = DefaultRouter()
+router.register(r'api-stores', views.StoreViewSet, basename='store-api')
+router.register(r'api-products', views.ProductViewSet, basename='product-api')
+
 
 urlpatterns = [
     # The empty quotes '' means this is the Home Page
@@ -18,5 +24,5 @@ urlpatterns = [
     path('cart/clear/', views.clear_cart, name='clear_cart'),
     path('checkout/', views.checkout, name='checkout'),
     path('register/', RegisterView.as_view(), name='register'),
-
+    path('api/', include(router.urls))
 ]
