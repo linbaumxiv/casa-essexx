@@ -20,3 +20,20 @@ class StoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
         fields = ['id', 'name', 'vendor', 'products']
+
+# 1. The Review Serializer (translates review objects to JSON)
+class ReviewSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True) # Shows username instead of ID number
+
+    class Meta:
+        model = Review
+        fields = ['id', 'user', 'rating', 'comment', 'created_at']
+
+# 2. Update Product Serializer to include Reviews
+class ProductSerializer(serializers.ModelSerializer):
+    # This "nests" the reviews inside the product JSON data
+    reviews = ReviewSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'description', 'price', 'stock', 'image', 'store', 'reviews']

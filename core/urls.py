@@ -1,17 +1,16 @@
 from django.urls import path, include
-from rest_framework import DefaultRouter 
+from rest_framework.routers import DefaultRouter 
 from . import views
 from .views import RegisterView
 
 router = DefaultRouter()
 router.register(r'api-stores', views.StoreViewSet, basename='store-api')
 router.register(r'api-products', views.ProductViewSet, basename='product-api')
-
+router.register(r'api-reviews', views.ReviewViewSet, basename='review-api')
 
 urlpatterns = [
     # The empty quotes '' means this is the Home Page
     path('', views.ProductListView.as_view(), name='home'),
-    
     path('dashboard/', views.vendor_dashboard, name='vendor_dashboard'),
     path('store/add/', views.StoreCreateView.as_view(), name='store_create'),
     path('store/edit/<int:pk>/', views.StoreUpdateView.as_view(), name='store_edit'),
