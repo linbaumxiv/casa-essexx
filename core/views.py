@@ -14,7 +14,7 @@ from rest_framework import viewsets, permissions
 from .forms import CustomUserCreationForm, ReviewForm
 from .models import Store, Product, Order, OrderItem, Review
 from .serializers import StoreSerializer, ProductSerializer, ReviewSerializer
-
+from .permissions import IsVendorOrReadOnly
 
 # --- API ACCESS ---
 
