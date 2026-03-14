@@ -9,13 +9,22 @@ Follow these steps in the exact order provided to get the application running on
 
 First, download the project files to your local machine:
 
+git clone <https://github.com/linbaumxiv/casa-essexx>
+cd casa_essexx
+
 2. Set Up Virtual Environment:
 
 Enter the project folder and create a virtual environment to isolate dependencies:
 
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
 3. Configure Dependencies:
 
 Install the required libraries, including the MariaDB client and REST framework, directly from the project folder:
+
+pip install --upgrade pip
+pip install -r requirements.txt
 
 4. Database Configuration (MariaDB):
 
@@ -23,13 +32,25 @@ Before migrations will work, you must manually create the database and a user wi
 
 Open your MariaDB/MySQL prompt:
 
+mysql -u root -p
+
 Run the following commands to create the database and a fresh user account:
+
+CREATE DATABASE casa_essexx_db;
+CREATE USER 'casa_admin'@'localhost' IDENTIFIED BY 'your_secure_password';
+GRANT ALL PRIVILEGES ON casa_essexx_db.* TO 'casa_admin'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
 
 Update the DATABASES section in casa_essexx/settings.py with the credentials created above.
 
 5. Initialize & Run:
 
 Apply the migrations to set up the schema and create an admin account for the dashboard:
+
+python3 manage.py migrate
+python3 manage.py createsuperuser
+python3 manage.py runserver
 
 Once the server is running, open your web browser and go to: 
 http://127.0.0.1:8000/
@@ -59,4 +80,6 @@ Back to Shopping: A "Continue Shopping" button is provided in the cart view to r
 Reviews are automatically flagged as "Verified Purchase" if the system detects the user has successfully checked out with that specific product in their order history.
 
 ### 🧪 Testing
-To verify the application logic, security permissions, and stock deduction
+To verify the application logic, security permissions, and stock deduction:
+
+python3 manage.py test

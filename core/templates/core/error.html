@@ -1,12 +1,29 @@
 {% extends "base.html" %}
 
+{% block title %}Transaction Error - Casa Essexx{% endblock %}
+
 {% block content %}
-<div style="text-align: center; padding: 50px;">
-    <h1 style="color: #dc3545;">⚠️ Oops!</h1>
-    <p style="font-size: 1.2em;">{{ message }}</p>
-    <br>
-    <a href="{% url 'cart_detail' %}" style="color: blue; text-decoration: underline;">
-        Return to Cart
-    </a>
+<div style="max-width: 600px; margin: 60px auto; text-align: center; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+    <div style="font-size: 4rem; color: #e74c3c; margin-bottom: 20px;">✘</div>
+    <h1 style="color: #c0392b; margin-bottom: 10px;">Transaction Failed</h1>
+    
+    <div style="background: #fff5f5; padding: 20px; border-radius: 8px; margin: 25px 0; border: 1px solid #feb2b2;">
+        <p style="margin: 0; color: #c53030; font-weight: 500;">
+            {% if message %}
+                {{ message }}
+            {% else %}
+                An unexpected error occurred during checkout. Please try again or contact support.
+            {% endif %}
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 15px; justify-content: center;">
+        <a href="{% url 'cart_detail' %}" style="background: #2c3e50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Return to Cart
+        </a>
+        <a href="{% url 'home' %}" style="background: #95a5a6; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Back to Marketplace
+        </a>
+    </div>
 </div>
 {% endblock %}

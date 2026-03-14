@@ -4,17 +4,17 @@
   <h1>Vendor Dashboard</h1>
   <p>Welcome, {{ user.username }}. Manage your stores and inventory below.</p>
   
-  <a href="{% url 'store_create' %}" style="background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+  <a href="{% url 'store_create' %}" style="background: #28a745; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; margin-bottom: 20px;">
     + Create New Store
   </a>
 
-  <h2 style="margin-top: 30px;">My Stores</h2>
+  <h2 style="margin-top: 10px;">My Stores</h2>
   {% for store in stores %}
-    <div style="border: 1px solid #ddd; margin-bottom: 20px; padding: 20px; border-radius: 8px; background-color: #fcfcfc;">
+    <div style="border: 1px solid #ddd; margin-bottom: 25px; padding: 20px; border-radius: 8px; background-color: #fcfcfc; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h3 style="margin: 0;">{{ store.name }}</h3>
+          <h3 style="margin: 0; color: #2c3e50;">{{ store.name }}</h3>
           <div>
-              <a href="{% url 'store_edit' store.id %}" style="text-decoration: none; margin-right: 10px;">Edit Info</a>
+              <a href="{% url 'store_edit' store.id %}" style="text-decoration: none; margin-right: 15px; color: #3498db;">Edit Info</a>
               <a href="{% url 'delete_store' store.id %}" 
                  style="color: #dc3545; font-size: 0.8rem; text-decoration: none; border: 1px solid #dc3545; padding: 3px 8px; border-radius: 4px;">
                  Delete Store
@@ -22,32 +22,41 @@
           </div>
       </div>
       
+      <p style="color: #7f8c8d; font-size: 0.9rem; margin-top: 5px;">{{ store.description }}</p>
+      
       <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
 
       <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h4>Products</h4>
-          <a href="{% url 'product_add' %}?store={{ store.id }}" style="font-size: 0.9rem; background: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 4px;">
+          <h4 style="margin: 0;">Products</h4>
+          <a href="{% url 'product_add' store.id %}" style="font-size: 0.9rem; background: #007bff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-weight: 500;">
             + Add Product to {{ store.name }}
           </a>
       </div>
 
-      <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+      <ul style="list-style: none; padding-left: 0; margin-top: 15px;">
         {% for product in store.products.all %}
-          <li style="padding: 8px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
-              <span><strong>{{ product.name }}</strong> — ${{ product.price }}</span>
+          <li style="padding: 10px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
               <span>
-                  <a href="{% url 'product_edit' product.id %}" style="font-size: 0.85rem; text-decoration: none;">Edit</a> | 
+                  <strong>{{ product.name }}</strong> 
+                  <span style="color: #7f8c8d; margin-left: 10px;">${{ product.price }}</span>
+                  <span style="margin-left: 15px; font-size: 0.85rem; color: {% if product.stock < 5 %}#e74c3c{% else %}#27ae60{% endif %};">
+                      Stock: {{ product.stock }}
+                  </span>
+              </span>
+              <span>
+                  <a href="{% url 'product_edit' product.id %}" style="font-size: 0.85rem; text-decoration: none; color: #3498db; margin-right: 10px;">Edit</a>
                   <a href="{% url 'product_delete' product.id %}" style="color: #dc3545; font-size: 0.85rem; text-decoration: none;">Delete</a>
               </span>
           </li>
         {% empty %}
-          <li style="color: #888; font-style: italic;">No products in this store yet.</li>
+          <li style="color: #888; font-style: italic; padding: 10px;">No products in this store yet.</li>
         {% endfor %}
       </ul>
     </div>
   {% empty %}
-    <div style="text-align: center; padding: 40px; border: 2px dashed #ccc; color: #777;">
-        <p>You haven't created any stores yet. Click the button above to get started!</p>
+    <div style="text-align: center; padding: 60px; border: 2px dashed #ccc; color: #777; border-radius: 10px;">
+        <p style="font-size: 1.1rem;">You haven't created any stores yet.</p>
+        <p>Click the "Create New Store" button above to start your vendor journey!</p>
     </div>
   {% endfor %}
 {% endblock %}

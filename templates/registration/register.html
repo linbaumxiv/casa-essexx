@@ -1,38 +1,40 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Register | Casa Essexx{% endblock %}
+{% block title %}Register - Casa Essexx{% endblock %}
 
 {% block content %}
-<div style="max-width: 450px; margin: 40px auto; padding: 30px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-    <h2 style="margin-top: 0; text-align: center; color: #2c3e50;">Join Casa Essexx</h2>
-    <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 25px;">
-        Choose your role and start your journey with us.
-    </p>
-
-    <form method="post">
+<div style="max-width: 500px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; color: #2c3e50; margin-bottom: 25px;">Create Your Account</h2>
+    
+    <form method="post" novalidate>
         {% csrf_token %}
         
-        <style>
-            form p { margin-bottom: 15px; }
-            form input[type="text"], form input[type="password"], form input[type="email"] {
-                width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
-            }
-            /* Styling for the Role Checkboxes */
-            form input[type="checkbox"] { transform: scale(1.2); margin-right: 10px; }
-            label[for="id_is_vendor"], label[for="id_is_buyer"] { font-weight: bold; color: #2c3e50; }
-        </style>
+        {% for field in form %}
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #34495e;">
+                    {{ field.label }}
+                </label>
+                
+                {# Django renders the dropdown <select> or <input> here #}
+                {{ field }}
+                
+                {% if field.help_text %}
+                    <small style="display: block; color: #7f8c8d; margin-top: 5px;">{{ field.help_text }}</small>
+                {% endif %}
+                
+                {% for error in field.errors %}
+                    <p style="color: #e74c3c; font-size: 0.85rem; margin-top: 5px;">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
 
-        {{ form.as_p }}
-
-        <button type="submit" style="width: 100%; padding: 12px; background-color: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; font-weight: bold; margin-top: 10px;">
-            Create My Account
+        <button type="submit" style="width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; font-weight: bold; transition: background 0.3s;">
+            Register & Start Shopping
         </button>
     </form>
     
-    <div style="margin-top: 20px; text-align: center; border-top: 1px solid #eee; padding-top: 15px;">
-        <p style="font-size: 0.9rem;">
-            Already have an account? <a href="{% url 'login' %}" style="color: #2980b9; font-weight: bold;">Login here</a>
-        </p>
-    </div>
+    <p style="text-align: center; margin-top: 20px; color: #7f8c8d;">
+        Already have an account? <a href="{% url 'login' %}" style="color: #3498db; text-decoration: none;">Login here</a>
+    </p>
 </div>
 {% endblock %}

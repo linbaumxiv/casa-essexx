@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 
+{% block title %}Order Successful - Casa Essexx{% endblock %}
+
 {% block content %}
-<div style="text-align: center; padding: 50px;">
-    <h1 style="color: #28a745;">🎉 Order Successful!</h1>
-    <p style="font-size: 1.2em;">Thank you for your purchase at Casa Essexx.</p>
-    <p>A confirmation email has been "sent" (check your terminal logs!).</p>
-    <br>
-    <a href="{% url 'home' %}" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">
-        Back to Home
+<div style="max-width: 600px; margin: 60px auto; text-align: center; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+    <div style="font-size: 4rem; color: #27ae60; margin-bottom: 20px;">✔</div>
+    <h1 style="color: #2c3e50; margin-bottom: 10px;">Order Confirmed!</h1>
+    <p style="color: #7f8c8d; font-size: 1.1rem; line-height: 1.6;">
+        Thank you for your purchase. Your transaction was successful, and the vendor has been notified to prepare your items.
+    </p>
+    
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 30px 0; border-left: 5px solid #27ae60;">
+        <p style="margin: 0; color: #34495e;">An invoice has been sent to <strong>{{ user.email }}</strong>.</p>
+    </div>
+
+    <a href="{% url 'home' %}" style="display: inline-block; background: #2c3e50; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s;">
+        Continue Shopping
     </a>
 </div>
 {% endblock %}

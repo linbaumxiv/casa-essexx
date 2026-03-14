@@ -22,7 +22,7 @@
         <h1 style="margin-top: 0;">{{ product.name }}</h1>
         <p style="font-size: 2rem; color: #28a745; font-weight: bold; margin: 10px 0;">${{ product.price }}</p>
         
-        <p style="color: {% if product.stock > 0 %}#155724{% else %}#721c24{% endif %}; font-weight: bold;">
+        <p class="font-bold {% if product.stock > 0 %}text-success{% else %}text-danger{% endif %}">
             {% if product.stock > 0 %} In Stock ({{ product.stock }} available) {% else %} Out of Stock {% endif %}
         </p>
 
@@ -33,6 +33,20 @@
         {% if product.stock > 0 %}
             <form action="{% url 'add_to_cart' product.id %}" method="post">
                 {% csrf_token %}
+                
+                <div style="margin-bottom: 20px;">
+                    <label for="quantity" style="display: block; font-weight: bold; margin-bottom: 8px; color: #333;">Quantity:</label>
+                    <input type="number" 
+                           id="quantity" 
+                           name="quantity" 
+                           value="1" 
+                           min="1" 
+                           max="{{ product.stock }}" 
+                           style="width: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem;"
+                           required>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Limit: {{ product.stock }} units</p>
+                </div>
+
                 <button type="submit" style="width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; font-weight: bold;">
                     Add to Cart
                 </button>
@@ -54,13 +68,9 @@
             <strong style="color: #007bff;">{{ review.user.username }}</strong> 
 
             {% if review.is_verified %}
-                <span style="background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; margin-left: 10px; border: 1px solid #c3e6cb;">
-                    Verified Purchase ✅
-                </span>
+                <span class="badge-verified">Verified Purchase ✅</span>
             {% else %}
-                <span style="background: #e2e3e5; color: #383d41; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-left: 10px; border: 1px solid #d6d8db;">
-                    Unverified Review
-                </span>
+                <span class="badge-unverified">Unverified Review</span>
             {% endif %}
 
             <span style="color: #f39c12; margin-left: 10px;">
