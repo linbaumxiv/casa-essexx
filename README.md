@@ -59,4 +59,4 @@ Back to Shopping: A "Continue Shopping" button is provided in the cart view to r
 Reviews are automatically flagged as "Verified Purchase" if the system detects the user has successfully checked out with that specific product in their order history.
 
 ### 🧪 Testing
-To verify the application logic, security permissions, and stock deduction:
+To verify the application logic, security permissions, and stock deduction
