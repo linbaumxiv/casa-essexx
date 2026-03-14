@@ -2,99 +2,61 @@
 
 An e-commerce platform built with Django and MariaDB that allows Vendors to manage stores and Buyers to purchase products with verified review tracking.
 
-## Features
-- **Role-Based Access:** Distinct Vendor and Buyer accounts.
-- **Store Management:** Full CRUD for Vendors to manage their retail space.
-- **Session-Based Cart:** Anonymous cart storage using Django sessions.
-- **Secure Checkout:** Transaction-safe inventory management and automated email invoices.
-- **Verified Reviews:** Automatic detection of purchase history for reviewer credibility.
+### 🚀 Local Setup & Installation
+Follow these steps in the exact order provided to get the application running on your local machine. Ensure you have MariaDB installed before starting.
 
----
+1. Clone the Project:
 
-## 🛠 Prerequisites
-- **Python 3.10+**
-- **MariaDB Server** (Running locally or remotely)
-- **Pip** (Python package manager)
+First, download the project files to your local machine:
 
----
+2. Set Up Virtual Environment:
 
-## 🚀 Local Setup & Installation
+Enter the project folder and create a virtual environment to isolate dependencies:
 
-### 1. Clone & Environment Setup
-First, clone the repository and create a virtual environment to isolate project dependencies:
-```bash
-git clone <your-repo-url>
-cd casa_essexx
-python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+3. Configure Dependencies:
 
-### 2. Configure Dependencies
+Install the required libraries, including the MariaDB client and REST framework, directly from the project folder:
 
-Install the required libraries. This includes mysqlclient (for MariaDB connection), djangorestframework (for the API), and tweepy (for social media signals):
+4. Database Configuration (MariaDB):
 
-Bash
-pip install --upgrade pip
-pip install -r requirements.txt
+Before migrations will work, you must manually create the database and a user within MariaDB.
 
-### 3. Database Configuration
+Open your MariaDB/MySQL prompt:
 
-Log into your MariaDB terminal and create the database:
+Run the following commands to create the database and a fresh user account:
 
-SQL:
-CREATE DATABASE casa_essexx_db;
-Create a .env file in the root directory and add your credentials:
+Update the DATABASES section in casa_essexx/settings.py with the credentials created above.
 
-Code snippet:
-DB_NAME=casa_essexx_db
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_HOST=localhost
-DB_PORT=3306
-SECRET_KEY=your_django_secret_key
+5. Initialize & Run:
 
-### 4. Database Migrations
+Apply the migrations to set up the schema and create an admin account for the dashboard:
 
-Initialize the MariaDB schema by running the migration files:
+Once the server is running, open your web browser and go to: 
+http://127.0.0.1:8000/
 
-Bash:
-python3 manage.py makemigrations
-python3 manage.py migrate
+#### 🛠 Features & UI Logic
 
-### 5. Create Administrative Access
+#### 🔐 Role-Based Security
 
-To access the Vendor Dashboard and Admin panel, create a superuser:
+Registration: Users select a single role (Buyer or Vendor) from a dropdown menu. Vendors cannot buy, and Buyers cannot manage stores.
 
-Bash:
-python3 manage.py createsuperuser
+Unique Credentials: Emails must be unique to support secure password resets and account integrity.
 
-### 6. Start the Development Server
+Auto-Login: Registered users are logged in immediately upon account creation for a seamless experience.
 
-Bash:
-python3 manage.py runserver
-The application will be available at http://127.0.0.1:8000/.
+### 🛒 Shopping & Inventory
 
-### 🔐 API Security & Permissions
-Important for Reviewers:
-This project implements strict Role-Based Access Control (RBAC) via Django Rest Framework:
+Contextual Navigation: The "View Cart" option is hidden for Vendors and Guests. It only appears for logged-in Buyers.
 
-Guests/Unauthenticated Users: Can view products via GET requests but cannot create or modify data.
+Quantity Selection: Buyers can type in specific quantities. The system validates this against current stock and the user's existing cart to prevent overselling.
 
-Buyers: Can browse and purchase but are blocked from creating Stores or Products.
+Atomic Checkout: Stock is deducted automatically during the transaction process to ensure inventory accuracy.
 
-Vendors: Have full CRUD permissions for their own Stores and Products.
-Permissions are enforced in core/permissions.py and applied to ViewSets in core/views.py.
+Back to Shopping: A "Continue Shopping" button is provided in the cart view to return to the marketplace easily.
 
-### 🧪 Testing the Application
-To run the automated test suite (including mocked API calls for Twitter signals):
+### ⭐ Verified Reviews
 
-Bash:
-python3 manage.py test
+Reviews are automatically flagged as "Verified Purchase" if the system detects the user has successfully checked out with that specific product in their order history.
 
-###📁 Project Structure Highlights
-
-core/models.py: Custom User model with is_vendor and is_buyer flags.
-
-core/signals.py: Automated Twitter announcements for new inventory.
-
-core/serializers.py: Nested JSON serialization for the REST API.
-
+### 🧪 Testing
+To verify the application logic, security permissions, and stock deduction:
